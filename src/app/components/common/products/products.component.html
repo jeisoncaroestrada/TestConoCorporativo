@@ -1,0 +1,79 @@
+<div class="container">
+	<div class="no-products-container center-items">
+		<div *ngIf="products.length <= 0 && !loading">
+			<div class="wid-100 center-items">
+				<i class="animation-all icon-add mdi mdi-package" ></i>
+			</div>
+			<p>No tiene productos creados</p>	
+			<div class="wid-100 center-items">
+				<span>
+					<button class="btn btn-pill btn-color-1" (click)="openModalProduct()">Crear producto</button>
+				</span>
+			</div>
+		</div>
+    </div>
+	<!-- *************************** DATOS CREADOS *************************** -->
+     <div *ngIf="products.length > 0" class="details-created-list">
+        <p class="fc-smooth">Estos son los productos creados.</p>
+        <!-- ******************** FILTRO DE PRODUCTOS ****************** -->
+        <div class="form-group icon search pos-relative">
+            <input type="text" class="form-control input-type" name="filterProducts" [(ngModel)]="filterProducts" #name="ngModel" required  placeholder="Filtrar Productos">
+        </div>
+        <!-- ******************** INPUT DE FECHA ****************** -->
+        <!-- ================== MENSAJES DE ERROR ==================== -->
+        <div *ngIf="error" class="alert alert-danger">
+            <ul *ngFor="let e of error">
+              <li>{{e}}</li>
+            </ul>
+            <!-- <span>{{error}}</span> -->
+            <i class="icon-close mdi mdi-close " (click)="closeError()"></i>
+        </div>
+        <div *ngIf="success" class="alert alert-success">
+            <span>{{success}}</span>
+            <i class="icon-close mdi mdi-close " (click)="closeSuccess()"></i>
+        </div>
+        <!-- *************************** PRODUCTOS CREADOS *************************** -->
+        <div *ngFor="let i of products | filterproducts:filterProducts let i = index" class="detail" [@slideToRight]='state'>
+            <div class="wid-100">
+                <div class="form-group">
+                    <!-- ************************ INPUTS ************************ -->
+                     <!-- ******************** INPUT DE NOMBRE ****************** -->
+                    <input [disabled]="!i.editing" type="text" class="form-control input-type" name="name" [(ngModel)]="i.Name" #name="ngModel" required  placeholder="Nombre del Producto">
+                    <!-- ******************** INPUT DE FECHA ****************** -->
+                    <input [disabled]="!i.editing" type="text" class="form-control input-value" name="description" [(ngModel)]="i.Description" #value="ngModel" required  placeholder="Descripción">
+                    <!-- ************************ DROPDOWN ************************ -->
+                    <div class="nativeDropdown input-type" >
+                        <div class="selectDropdown hover-bd-1" [ngClass]="{'disabled': !i.editing}">
+                            <select [(ngModel)]="i.State" [ngModelOptions]="{standalone: true}" id="state" name="state" class="">
+                                <option *ngFor="let s of states" [ngValue]="s">{{s}}</option>
+                            </select>
+                            <div class="custom-select" [ngClass]="{'disabled': !i.editing}"aria-hidden="true">{{i.State ? i.State : 'Estado'}}</div>
+                        </div>
+                    </div>
+                    <!-- ************************ ACCIONES ************************ -->
+                    <div class="actions center-items">
+                        <span [hidden]="i.editing" class="edit fc-1" (click)="startEdit(i)">Editar</span>
+                        <span [hidden]="i.editing" class="delete fc-1" (click)="confirmDelete(i)">Eliminar</span>
+                        <span [hidden]="!i.editing" class="save fc-1" (click)="update(i)">Guardar</span>
+                        <span [hidden]="!i.editing" (click)="cancelEdit(i)" class="cancel fc-1">Cancelar</span>
+                    </div>
+                </div>
+            </div> 
+            <!-- ************************ CONFIRMAR BORRAR ************************ -->
+            <div [@slideInTop]='state' class="delete-confirmation center-items" *ngIf="i.delete">
+                <div class="wid-100 center-items-xs-up">
+                    <div class="form-group col-xs-12 col-md-2">
+                        <button [disabled]="loading" (click)="delete(i)" class="btn btn-primary btn-rounded btn-slim-xs wid-100">{{loading ? 'Procesando...' : 'Eliminar'}}</button>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <button [disabled]="loading" (click)="cancelDelete(i)" class="btn btn-primary btn-rounded btn-slim-xs clear negative wid-100">{{loading ? 'Procesando...' : 'Cancelar'}}</button>
+                    </div>
+                </div>
+            </div>
+            <!-- ************************ LOADER ************************ -->
+            <sta-loader class="fadeOut" [position]="'absolute'" [background]="'rgba(255,255,255,0.7)'"  *ngIf="i.loading"></sta-loader> 
+        </div>
+        <!-- ************************ LOADER ************************ -->
+    </div>
+        <sta-loader class="fadeOut" [position]="'absolute'" [background]="'rgba(255,255,255,0.7)'" [text]="'Cargando productos...'" *ngIf="loading"></sta-loader> 
+</div>

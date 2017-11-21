@@ -1,0 +1,21 @@
+<!-- ***************************  PORTADA *************************** -->
+<!-- *********************************************************************** -->
+<sta-profile-cover></sta-profile-cover>
+<!-- *************************** FOTO DE PERFIL *************************** -->
+<!-- *********************************************************************** -->
+<div class="avatar-container center-items wid-100">
+	<div class="avatar">
+		<sta-profile-avatar></sta-profile-avatar>
+	</div>
+</div>
+<!-- *************************** DETALLES DEL PERFIL *************************** -->
+<!-- *********************************************************************** -->
+<sta-profile-details></sta-profile-details>
+<!-- *************************** PRODUCTOS CREADOS *************************** -->
+<!-- *********************************************************************** -->
+<sta-products></sta-products>
+<!-- *************************** CREAR NUEVO PRODUCTO *************************** -->
+<!-- *********************************************************************** -->
+<sta-panel-modal [@swipeToTop]="state" *ngIf="openModalCreateProduct" [(visible)]="openModalCreateProduct">
+	<sta-create-product class="col-xs-11 col-sm-6"></sta-create-product>
+</sta-panel-modal>
